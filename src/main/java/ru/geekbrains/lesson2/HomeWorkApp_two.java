@@ -9,10 +9,6 @@ public class HomeWorkApp_two {
         printString("Задание №4", 5);
         System.out.println(checkYear(2200));
 
-
-
-
-
     }
     // 1.
     public static boolean getBoolean(int a, int b){
