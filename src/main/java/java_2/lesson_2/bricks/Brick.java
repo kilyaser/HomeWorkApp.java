@@ -1,28 +1,31 @@
-package java_2.lesson_1;
+package java_2.lesson_2.bricks;
+
+import java_2.lesson_2.common.GameCanvas;
+import java_2.lesson_2.common.Sprite;
 
 import java.awt.*;
 import java.util.Random;
 
-public class Ball extends Sprite {
+public class Brick extends Sprite {
     private static Random rnd = new Random();
     private final Color color;
     private float vX;
     private float vY;
 
-    Ball() {
+    Brick() {
         halfHeight = 20 + (float) (Math.random() * 50f);
         halfWidth = halfHeight;
         color = new Color(rnd.nextInt());
         vX = 100f + (float) (Math.random() * 200f);
         vY = 100f + (float) (Math.random() * 200f);
     }
-    Ball(int x, int Y){
+    Brick(int x, int Y){
         this();
         this.x = x;
         this.y = y;
     }
-
-    void update(GameCanvas canvas, float deltaTime) {
+    @Override
+    public void update(GameCanvas canvas, float deltaTime) {
         x += vX * deltaTime;
         y += vY * deltaTime;
 
@@ -45,9 +48,9 @@ public class Ball extends Sprite {
     }
 
     @Override
-    void render(GameCanvas canvas, Graphics g) {
+    public void render(GameCanvas canvas, Graphics g) {
         g.setColor(color);
-        g.fillOval((int) getLeft(), (int) getTop(),
+        g.fillRect((int) getLeft(), (int) getTop(),
                 (int) getWidth(), (int) getHeight());
     }
 }
