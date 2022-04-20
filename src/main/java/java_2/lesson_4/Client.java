@@ -4,10 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Client extends JFrame implements ActionListener, Thread.UncaughtExceptionHandler {
     private static final int WIDTH = 400;
     private static final int HEIGHT = 300;
+    public File logFile = new File("C:\\logFile.txt");
 
     private final JTextArea log = new JTextArea();
 
@@ -26,13 +30,14 @@ public class Client extends JFrame implements ActionListener, Thread.UncaughtExc
     private final JList<String> userList = new JList<>();
 
 
-    private Client() {
+    private Client()  {
         Thread.setDefaultUncaughtExceptionHandler(this);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); //РїРѕСЃСЂРµРґРё СЌРєСЂР°РЅР°
         setSize(WIDTH, HEIGHT);
         setTitle("Chat Client");
         log.setEditable(false);
+
         JScrollPane spLog = new JScrollPane(log);
         JScrollPane spUsers = new JScrollPane(userList);
         String[] users = {"user1", "user2",
@@ -42,6 +47,10 @@ public class Client extends JFrame implements ActionListener, Thread.UncaughtExc
         userList.setListData(users);
         spUsers.setPreferredSize(new Dimension(100, 0));
         cbAlwaysOnTop.addActionListener(this);
+        btnSend.addActionListener(this);
+        tfMessage.addActionListener(this);
+
+
 
 
         panelTop.add(tfIPAddress);
@@ -76,9 +85,34 @@ public class Client extends JFrame implements ActionListener, Thread.UncaughtExc
         Object src = e.getSource();
         if (src == cbAlwaysOnTop) {
             setAlwaysOnTop(cbAlwaysOnTop.isSelected());
+        } else if (src == btnSend) {
+            log.append(tfMessage.getText() + "\n");
+            writeFileLog(tfMessage.getText() + "\n");
+            tfMessage.setText("");
+        } else if (src == tfMessage){
+            log.append(tfMessage.getText() + "\n");
+            writeFileLog(tfMessage.getText() + "\n");
+            tfMessage.setText("");
         } else {
             throw new RuntimeException("Action for component unimplemented");
         }
+    }
+
+    public void writeFileLog(String log){
+
+        try {
+            if(logFile.createNewFile()){
+            FileWriter fileWriter = new FileWriter(logFile);
+            fileWriter.append(log);
+            fileWriter.close();
+            }
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+
     }
 
     @Override
